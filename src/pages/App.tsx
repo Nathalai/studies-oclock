@@ -1,4 +1,5 @@
 import React from 'react';
+import Cronometro from '../components/Cronometro';
 import Formulario from '../components/Form';
 import Lista from '../components/List';
 import style from './App.module.scss';
@@ -8,6 +9,7 @@ function App() {
     <div className={style.AppStyle}>
       <Formulario />
       <Lista />
+      <Cronometro />
     </div>
   );
 }
