@@ -1,16 +1,45 @@
 import React from "react";
+import { ITarefa } from "../../types/tema";
 import Botao from "../Button";
-import style from './Formulario.module.scss';
+import style from "./Formulario.module.scss";
+import { v4 as uuidv4 } from "uuid";
 
-class Formulario extends React.Component {
+class Formulario extends React.Component<{
+    setTarefas: React.Dispatch<React.SetStateAction<ITarefa[]>>
+}> {
+    state = {
+        tema: "",
+        tempo: "00:00"
+    }
+
+    adicionarTarefa(evento: React.FormEvent<HTMLFormElement>) {
+        evento.preventDefault();
+        this.props.setTarefas(tarefasAntigas => 
+            [
+                ...tarefasAntigas, 
+                {
+                    ...this.state,
+                    selecionado: false,
+                    completado: false,
+                    id: uuidv4()
+                }
+            ])
+        this.setState({
+            tema: "",
+            tempo: "00:00"
+        })
+    }
+
     render () {
         return (
-            <form className={style.novaTarefa}>
+            <form className={style.novaTarefa} onSubmit={this.adicionarTarefa.bind(this)}>
                 <div className= {style.inputContainer}>
                     <label htmlFor="tarefa">Adicione um novo estudo</label>
                     <input 
                         type="text" 
-                        name="tarefa" 
+                        name="tarefa"
+                        value={this.state.tema}
+                        onChange={evento => this.setState({...this.state, tema: evento.target.value})}
                         id="tarefa" 
                         placeholder="O que você vai estudar?" 
                         required 
@@ -22,6 +51,8 @@ class Formulario extends React.Component {
                         type="time" 
                         step="1" 
                         name="tempo" 
+                        value={this.state.tempo}
+                        onChange={evento => this.setState({...this.state, tempo: evento.target.value})}
                         id="tempo" 
                         min="00:00:00" 
                         max="01:30:00"
@@ -29,7 +60,7 @@ class Formulario extends React.Component {
                         required
                     />
                 </div>
-                <Botao>
+                <Botao type="submit">
                     Adicionar
                 </Botao>                   
             </form>
